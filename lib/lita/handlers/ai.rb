@@ -10,7 +10,7 @@ module Lita
       def chat(payload)
         return unless chatting?(payload[:message])
         message = extract_aliases(payload[:message])
-        reply = self.class.cleverbot.think(message.body)
+        reply = self.class.cleverbot.think(message.body).gsub(/\|([\da-fA-F]{4})/) {|m| [$1].pack("H*").unpack("n*").pack("U*")}
         robot.send_message(message.source, reply)
       end
 
